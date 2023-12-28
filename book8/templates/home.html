@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}8book{% endblock %}
+
+{% block content %}       
+<div class="container">
+    <h2>最新更新</h2>
+    <div class="row">
+        {% for book in result %}
+            <div class="col">
+                <h1>{{ book.0 }}</h1>
+                <a href="{{ url_for('book', book=book.0) }}"><img src="{{ book.2 }}"></a>
+                <p>{{ book.1 }} 章節數:{{ book.3 }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div id="bookList"></div>
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

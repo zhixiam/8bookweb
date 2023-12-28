@@ -1,0 +1,55 @@
+.book-cover{
+    display: flex;
+    text-align: center;
+    margin-bottom: 20px; 
+    margin-left: 20px;
+    margin-right: 20px;
+    border-radius: 10px;
+    background-color: #f0f0f0; 
+}
+.book-details{
+    width: 66.6%;
+    background-color: rgb(233, 233, 233);
+    padding: 20px;
+    border-radius: 10px;
+}
+.book-details h1 {
+    font-size: 32px;
+    margin-top: 10px;
+
+}
+.book-details p {
+    font-size: 24px;
+    margin: 10px;
+    padding: 0.5em;
+    text-align: left;
+}
+
+.book-cover img {
+    width: 33.3%;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+a{
+    text-decoration: none;
+}
+.booklist a{
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    font-size: 18px;
+    margin-bottom: 16px;
+    padding: 0.5em;
+    margin-top: 0;
+    margin-left: -9px;
+    margin-right: -9px;
+    width: 400px;
+    display: block;
+    border-radius: 5px;
+}
+/* 添加 hover 效果 */
+.booklist a:hover {
+    color: #007bff;
+    text-decoration: underline;
+    background-color: #b3e0ff;
+}
+

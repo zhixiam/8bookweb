@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}       
+
+<div class="container">
+    <div class="book-cover">
+        <img src="{{ book_img }}" alt="{{ book_name }}">
+        <div class="book-details">
+            <h1>{{ book_name }}</h1>
+            <p class="author">{{ book_author }}</p>
+            <p class="update-time">更新時間: {{ post_date }}</p>
+            <p class="chapter-count">總章節數: {{ book_count }}</p>
+        </div>
+    </div>
+    <ul class="booklist row">
+    {% for book in result %}
+        <a href="{{ url_for('text', book=book.0) }}">{{ book.0 }}</a>
+    {% endfor %}
+    </ul>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+<div class="footer">
+    <a href="{{ back_link }}">返回首頁</a>
+</div>
+{% endblock %}

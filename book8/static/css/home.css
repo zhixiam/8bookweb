@@ -1,0 +1,134 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #212529;
+    height: auto;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.search-container {
+    margin-top: 20px;
+}
+
+input[type=text] {
+    padding: 10px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+main {
+    margin-top:50px;  /*  距離外部上面50像素  */
+    width:100%;
+    box-sizing: border-box;
+    display: block;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* 容器寬度 */
+.container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0.5rem;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.row{
+    box-sizing: border-box;
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 0.25rem;
+    margin: 0;
+}
+
+.col {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 15px; 
+    text-align: center;
+}
+@media (min-width: 576px) {
+    .col {
+        width: 50%; /* 在屏幕寬度大於 576px 時，每行2列 */
+    }
+}
+
+@media (min-width: 768px) {
+    .col {
+        width: 33.333%; /* 在屏幕寬度大於 768px 時，每行三列 */
+    }
+}
+
+@media (min-width: 992px) {
+    .col {
+        width: 25%; /* 在屏幕寬度大於 992px 時，每行四列 */
+    }
+}
+
+@media (min-width: 1200px) {
+    .col {
+        width: 25%; /* 在屏幕寬度大於 992px 時，每行四列 */
+    }
+} 
+@media (max-width: 768px) {
+    .book-cover img {
+        display: none;
+    }
+}
+.row p {
+    font-size: 18px;
+	font-weight: bold;
+    text-align: center;
+}
+
+img {
+    height: 50%;
+    width: 50%;
+	border-radius: 5%;
+}
+h1 {
+    height: 80px;
+}
+main h2{
+    font-size: 24px;
+    text-align: left;
+    margin: 10px;
+}
+
+
+.crawl-button {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.crawl-button a {
+    color: #fff;
+    background-color: #007bff;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.crawl-button a:hover {
+    background-color: #0056b3;
+}
+
+
+

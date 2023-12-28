@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}爬蟲模式{% endblock %}
+
+{% block content %}       
+<h1>小說查詢與爬取</h1>
+
+<!-- 搜尋表單 -->
+<form method="post" action="{{ url_for('reptile') }}">
+    <label for="novel_name">請輸入小說名稱：</label>
+    <input type="text" id="novel_name" name="novel_name">
+    <button type="submit">搜尋</button>
+</form>
+
+{% if title_list %}
+    <!-- 書籍列表 -->
+    <div class="container">
+        <div id="loadingMessage" style="display: none;">
+            <h1>正在執行中</h1>
+        </div>
+        <h2>選擇一本小說：</h2>
+        <ul class="no-bullets" id="ul-item">
+            {% for list in title_list %}
+                <li>
+                    <a class="list-item" href="{{ url_for('reptile', selected_index=loop.index) }}">
+                        <h1>{{ loop.index }}. {{ list[0] }}</h1>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% elif selected_book %}
+    <!-- 書籍詳情 -->
+    <div class="container">
+        <h1>書籍詳情</h1>
+        <h1>書籍名稱:{{ selected_book }}</h1>
+        <img src="{{ img_url }}"></a>
+        <p>{{ author }}</p>
+        <p>結束時間:{{ currentTime }}</p>
+        <p>已完成</p>
+    </div>
+{% else %}
+    <div style="display: none;"></div>
+{% endif %}
+
+
+{% endblock %}
+
+{% block footer %}
+<div class="footer">
+    <a href="{{ back_link }}">返回首頁</a>
+</div>
+{% endblock %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fetchDataLinks = document.querySelectorAll('.list-item');
+        fetchDataLinks.forEach(link => {
+            console.log('事件監聽器已註冊到', link);
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                loadingMessage();
+            });
+        });
+
+        function loadingMessage() {
+            // 顯示 loadingMessage
+            console.log('loadingMessage 函數被執行');
+            document.getElementById('ul-item').style.display = 'none';
+            document.getElementById('loadingMessage').style.display = 'block';
+        }
+    });
+</script>

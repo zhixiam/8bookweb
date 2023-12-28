@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/home.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/text.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/book.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/reptile.css')}}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Book Library</h1>
+        <div class="search-container">
+            <form action="{{ url_for('search_books') }}" method="GET">
+                <input type="text" name="query" id="searchInput" placeholder="請輸入作者或書名">
+                <button type="submit">搜尋</button>
+            </form>
+        </div>
+        <div class="crawl-button">
+            <a href="{{ url_for('reptile') }}">爬蟲模式</a>
+        </div>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer>
+        {% block footer %}{% endblock %}
+    </footer>
+</body>
+</html>

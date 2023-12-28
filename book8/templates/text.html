@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}       
+<div class="container">
+    <div class="title">
+        <h1>{{ chapter_title }}</h1>
+    </div>
+    {% if result %}
+        {{ result|safe }}
+    {% else %}
+        <p>找不到指定的章節</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block footer %}
+<div class="footer">
+
+    <button onclick="navigateTo('{{ back_link }}')">返回目錄</button>
+
+    {% if next_link is not none %}
+        <button onclick="navigateTo('{{ next_link }}')">下一頁</button>
+    {% endif %}
+
+</div>
+<script>
+    function navigateTo(link) {
+        if (link) {
+            window.location.href = link;
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}搜尋結果{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>搜尋關鍵字:"{{ query }}"</h2>
+    {% if result %}
+        <div class="row">
+            {% for book in result %}
+                <div class="col">
+                    {% if book[0] %}
+                        <h1>{{ book.0 }}</h1>
+                        <a href="{{ url_for('book', book=book.0) }}"><img src="{{ book.2 }}"></a>
+                        <p>{{ book.1 }} 章節數:{{ book.3 }}</p>
+                    {% else %}
+                        <p>未知書籍信息</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>尚未搜尋到書籍</p>
+    {% endif %}
+</div>
+{% endblock %}
+{% block footer %}
+<div class="footer">
+    <a href="{{ back_link }}">返回首頁</a>
+</div>
+{% endblock %}
