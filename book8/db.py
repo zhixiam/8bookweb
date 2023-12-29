@@ -24,7 +24,8 @@ class Database:
             passwd=password,
             db=dbname,
             port=port,
-            charset='utf8mb4'
+            charset='utf8mb4',
+            autocommit=True
         )
         self.cursor = self.conn.cursor()
 
