@@ -470,34 +470,31 @@ def custom_split(text):
     paragraphs = []
     paragraph = ''
     in_quotes = False
-    continuous_marks = 0
-    left_quotes = ['“', '「', '（', '【','『']
-    right_quotes = ['”', '」', '）', '】','』']#建議使用複製貼上的方式，否則會無法匹配
+    left_quotes = ['“', '「', '（', '【', '『', '《']
+    right_quotes = ['”', '」', '）', '】', '』', '》']
 
-    for char in text:
+    for i, char in enumerate(text):
         paragraph += char
 
         if char in left_quotes:
             in_quotes = True
         elif char in right_quotes:
             in_quotes = False
-            continuous_marks = 0
-        
+
+            # 檢查右引號的下一個，是否是左引號
+            if i < len(text) - 1 and text[i + 1] in left_quotes:
+                paragraphs.append(paragraph.strip() + '\n\n')
+                paragraph = ''#初始化文字
                 
-        if char in '。!?；？」”':
-            if not in_quotes and continuous_marks <= 1:  # 檢查是否在引號內
-                paragraphs.append(paragraph.strip())
+        if not in_quotes:  # 檢查是否在引號內
+            if char in '。':
+                paragraphs.append(paragraph.strip() + '\n\n')
                 paragraph = ''
-            continuous_marks += 1
-        else:
-            continuous_marks = 0
+    
 
     if paragraph:
         paragraphs.append(paragraph.strip())
 
-    for i in range(len(paragraphs)):  
-        paragraphs[i] += '\n\n'
-        
     return paragraphs
 
 
