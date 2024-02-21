@@ -40,10 +40,10 @@ class Database:
     def execute_update(self, sql, params=None):
         try:
             self.cursor.execute(sql, params)
-            self.conn.commit()
         except Exception as e:
             print(f"Error executing update: {e}")
             self.conn.rollback()
-
+    
+    
     def close(self):
         self.conn.close()

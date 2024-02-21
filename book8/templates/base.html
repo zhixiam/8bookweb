@@ -3,25 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/home.css')}}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/text.css')}}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/book.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/login.css')}}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/reptile.css')}}">
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="/static/js/scrollTop.js"></script>
 </head>
 <body>
     <header>
-        <h1>Book Library</h1>
+        <a class="logo" href="{{ url_for('home') }}">
+            <h1>Book Library</h1>
+        </a>
+        <div class="user-info">
+            {% if user %}
+                <p>歡迎回來，{{ user.username }}</p>
+                <a href="{{ url_for('logout') }}">登出</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">登入</a>
+                <a href="{{ url_for('register') }}">註冊</a>
+            {% endif %}
+        </div>
+
         <div class="search-container">
             <form action="{{ url_for('search_books') }}" method="GET">
-                <input type="text" name="query" id="searchInput" placeholder="請輸入作者或書名">
-                <button type="submit">搜尋</button>
+                <div class="search-wrapper">
+                    <input type="text" name="query" id="searchInput" placeholder="請輸入作者或書名">
+                    <button type="submit" class="search-button">
+                        <svg xmlns="https://www.w3.org/TR/SVG2/" width="20" height="20" viewBox="0 0 20 20">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.85-5-5.66-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.19 5.34 5.66a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                    </button>
+                </div>
             </form>
         </div>
-        <div class="crawl-button">
-            <a href="{{ url_for('reptile') }}">爬蟲模式</a>
-        </div>
+        {% if user%}
+            <div class="crawl-button" >
+                <a href="{{ url_for('reptile') }}">爬蟲模式</a>
+            </div>
+        {% endif %}
+        <button onclick="scrollToTop()" id="scrollTopButton" title="回到頂部">top</button>
     </header>
     <main>
         {% block content %}{% endblock %}
@@ -32,3 +57,14 @@
     </footer>
 </body>
 </html>
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var crawlButton = document.querySelector('.crawl-button a');
+        crawlButton.addEventListener('click', function (event) {
+            event.preventDefault(); 
+            alert('該功能禁用中需等官方白名單通過');
+        });
+    });
+</script> -->
+

@@ -5,17 +5,13 @@
 {% block content %}
 <div class="container">
     <h2>搜尋關鍵字:"{{ query }}"</h2>
-    {% if result %}
+    {% if books_info %}
         <div class="row">
-            {% for book in result %}
+            {% for book_info in books_info %}
                 <div class="col">
-                    {% if book[0] %}
-                        <h1>{{ book.0 }}</h1>
-                        <a href="{{ url_for('book', book=book.0) }}"><img src="{{ book.2 }}"></a>
-                        <p>{{ book.1 }} 章節數:{{ book.3 }}</p>
-                    {% else %}
-                        <p>未知書籍信息</p>
-                    {% endif %}
+                    <h1>{{ book_info['book_name'] }}</h1>
+                    <a href="{{ url_for('book', book=book_info['book_id']) }}"><img src="{{ book_info['image'] }}" alt="{{book_info['book_name']}}"></a>
+                    <p>{{ book_info['book_author'] }} 章節數:{{ book_info['total_chapters'] }} 更新日期:{{ book_info['latest_update_date']}}</p>
                 </div>
             {% endfor %}
         </div>

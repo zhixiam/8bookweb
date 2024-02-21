@@ -7,37 +7,49 @@
 
 <!-- 搜尋表單 -->
 <form method="post" action="{{ url_for('reptile') }}">
-    <label for="novel_name">請輸入小說名稱：</label>
-    <input type="text" id="novel_name" name="novel_name">
-    <button type="submit">搜尋</button>
+    <div class="search-wrapper">
+        <input type="text" name="novel_name" id="novel_name" placeholder="請輸入書名">
+        <button type="submit" class="search-button">
+            <svg xmlns="https://www.w3.org/TR/SVG2/" width="20" height="20" viewBox="0 0 20 20">
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 0 0 1.48-5.34c-.47-2.78-2.85-5-5.66-5.34a6.505 6.505 0 0 0-7.27 7.27c.34 2.8 2.56 5.19 5.34 5.66a6.5 6.5 0 0 0 5.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+        </button>
+    </div>
 </form>
 
+
 {% if title_list %}
+    <br>
+    <br>
     <!-- 書籍列表 -->
     <div class="container">
-        <div id="loadingMessage" style="display: none;">
-            <h1>正在執行中</h1>
-        </div>
         <h2>選擇一本小說：</h2>
-        <ul class="no-bullets" id="ul-item">
+        <div class="row">
             {% for list in title_list %}
-                <li>
-                    <a class="list-item" href="{{ url_for('reptile', selected_index=loop.index) }}">
-                        <h1>{{ loop.index }}. {{ list[0] }}</h1>
+                <div class="col">
+                    <a class="list-item" href="{{ url_for('reptile', selected_index=loop.index) }}">                    
+                        <p>{{ list[0] }}</p>
+                        <img src="{{ list[2] }}" alt="{{ list[0] }}">
+                        <p>作者:{{ list[3] }}</p>
+                        <p>章節數:{{ list[4] }}</p>
+                        <p>最後更新日期:{{ list[5] }}</p>
                     </a>
-                </li>
+                </div >
             {% endfor %}
-        </ul>
+        </div >
     </div>
+
 {% elif selected_book %}
+    <br>
+    <br>
     <!-- 書籍詳情 -->
     <div class="container">
         <h1>書籍詳情</h1>
         <h1>書籍名稱:{{ selected_book }}</h1>
-        <img src="{{ img_url }}"></a>
+        <img src="{{ images }}" alt="{{selected_book}}">
         <p>{{ author }}</p>
-        <p>結束時間:{{ currentTime }}</p>
-        <p>已完成</p>
+        <p>結束時間:{{ update_date }}</p>
     </div>
 {% else %}
     <div style="display: none;"></div>
@@ -52,22 +64,3 @@
 </div>
 {% endblock %}
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const fetchDataLinks = document.querySelectorAll('.list-item');
-        fetchDataLinks.forEach(link => {
-            console.log('事件監聽器已註冊到', link);
-            link.addEventListener('click', function(event) {
-                event.preventDefault();
-                loadingMessage();
-            });
-        });
-
-        function loadingMessage() {
-            // 顯示 loadingMessage
-            console.log('loadingMessage 函數被執行');
-            document.getElementById('ul-item').style.display = 'none';
-            document.getElementById('loadingMessage').style.display = 'block';
-        }
-    });
-</script>

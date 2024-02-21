@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}  
+<div class="container">
+    
+    <h1>登入</h1>
+    <form action="{{ url_for('login') }}" method="post">
+        <label for="login_username">用戶名:</label>
+        <input type="text" id="username" name="username">
+        <label for="login_password">密碼:</label>
+        <input type="password" id="password" name="password"><br><br>
+        <input type="submit" value="Login">
+    </form>
+    <a href="{{ url_for('forgot_password') }}">忘記密碼</a>
+
+    {% if error_message %}
+        <label class="message">{{ error_message }}</label>
+    {% endif %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <h3><a href="{{ url_for('register') }}">切換註冊</a></h3>
+</div>
+
+{% endblock %}
+
+

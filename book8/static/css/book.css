@@ -9,9 +9,9 @@
 }
 .book-details{
     width: 66.6%;
-    background-color: rgb(233, 233, 233);
     padding: 20px;
     border-radius: 10px;
+
 }
 .book-details h1 {
     font-size: 32px;
@@ -38,13 +38,12 @@ a{
     box-sizing: border-box;
     font-size: 18px;
     margin-bottom: 16px;
-    padding: 0.5em;
-    margin-top: 0;
-    margin-left: -9px;
-    margin-right: -9px;
-    width: 400px;
+    margin-right: 16px;
+    width: 350px;
     display: block;
     border-radius: 5px;
+    color: black;
+    text-align: left;
 }
 /* 添加 hover 效果 */
 .booklist a:hover {
@@ -53,3 +52,15 @@ a{
     background-color: #b3e0ff;
 }
 
+#favorite-btn{
+    color: #fff;
+    background-color: #007bff;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#favorite-btn:hover {
+    background-color: #0056b3;
+}

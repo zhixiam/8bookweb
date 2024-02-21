@@ -11,6 +11,7 @@ import re
 from db import Database
 from urllib.parse import urljoin
 from datetime import datetime
+import os
 
 class NovelScraper:
     def __init__(self):
@@ -43,11 +44,16 @@ class NovelScraper:
         try:
             for i, title_element in enumerate(titles):
                 book_name = title_element.find('li', class_='nowraphide').text
+                img = title_element.find('img', class_='cover120').get('src')
+                images = self.url + img
+                chapter = title_element.find('small', class_='badge more-right-eps').text
+                update = title_element.find('li', class_='text-gray pl-3 small').text
+                author = title_element.find('span', class_='nowraphide search_author').text
                 novel_link = title_element.find('a', class_='w-100 nowraphide').get('href')
                 match = re.search(r'/(\d+)', novel_link)
                 if match:
                     link = match.group(1)
-                    title_list.append((book_name, link))
+                    title_list.append((book_name, link, images, author, chapter, update))
         except AttributeError as e:
             print('請重抓element屬性', e)
         return title_list
@@ -57,8 +63,8 @@ class NovelScraper:
         取得使用者所選擇的小說。
 
         Parameters:
-        - title_list (list): session全部的小說標題
-        - user_input (str): 使用者選擇的小說編號
+        - title_list (list): session全部的小說資訊
+        - user_input (int): 使用者選擇的小說編號用於解構title_list[]
         """ 
         
         selected_book = None
@@ -67,7 +73,7 @@ class NovelScraper:
         if user_input is not None and user_input.isdigit():
             selected_index = int(user_input) - 1
             if 0 <= selected_index < len(title_list):
-                selected_book, selected_link = title_list[selected_index]
+                selected_book, selected_link = title_list[selected_index][:2]#只取前兩個
     
         if selected_book is not None and selected_link is not None:
             url2 = self.url + f'/novelbooks/{selected_link}/'
@@ -102,21 +108,59 @@ class NovelScraper:
                 print(f"小說類型 {category} 對應的數字代號是: {book_tag}")
             else:
                 print(f"未找到小說類型 {category}")
-
-            
-            book_img = soup.find('div', class_='d-none d-md-block col-md-2 p-0 item-cover').find('img')
-            img_url = book_img['src']
-            img_url = urljoin(self.url, img_url)
-            print(img_url)
-
+                
             charset = soup.meta.get('charset')
             if charset:
                 decoded_text = response.content.decode(charset)
                 soup = BeautifulSoup(decoded_text, 'html.parser')
                 author = soup.find('span', class_="mr-1 item-info-author").text
                 print(author)
+            
+            book_img = soup.find('div', class_='d-none d-md-block col-md-2 p-0 item-cover').find('img')
+            img = book_img['src']
+            img_url = urljoin(self.url, img)
+            print(img_url)
+            if img_url:
+                response = requests.get(img_url, headers=self.headers)
+                if response.status_code == 200:
+                    # 將檔案名稱設置為希望的路徑格式
+                    
+                    images = os.path.join('static', 'images', selected_book + '.jpg')           
+        
+                    with open(images, 'wb') as f:
+                        f.write(response.content)
+                        print("圖片已下載並儲存到:", images)
+        
+                else:
+                    print("圖片下載失敗:", response.status_code)   
 
+        
+            
+            # 檢查書名是否已存在
+            sql_check_existing_book = """
+                SELECT COUNT(*) 
+                FROM books 
+                WHERE book = %s
+            """
+            
+            existing_count = db.execute_query(sql_check_existing_book, (selected_book,))
+            existing = existing_count[0][0]  # 如果書名存在，existing 將是1以上，否則為 0
+            
+            # 如果書名不存在，插入新書籍
+            if existing == 0:
+                sql_insert_book = """
+                    INSERT INTO books (book, author, image)
+                    VALUES (%s, %s, %s)
+                """
+                db.execute_update(sql_insert_book, (selected_book, author, images))
+                print("成功插入新書籍")
+            else:
+                print("書名已存在，無需插入新書籍")
+            
+            
             chapters = soup.find_all('a', class_='col-sm-12 col-md-6 col-lg-4 py-2 episode_li')
+            num_chapters = len(chapters)
+            print(f'總共有{num_chapters}')
             for chapter in chapters:
                 chapter_title = chapter.text.strip()
                 chapter_link = self.url + chapter['href']
@@ -166,32 +210,48 @@ class NovelScraper:
 
                     text_content = soup.get_text()
                     #清除防盜流水
-                    cleaned_text = re.sub(r'[^\u4e00-\u9fa5，。？！、]+', '', text_content)
+                    cleaned_text = re.sub(r'[вＯьoσк⑧ｋ．ｃm⑻ＢОК·См8Ь.cΟＫCｂом８kＢｏοOKСｍBсb⒏Ｃm　]', '', text_content)
                     character_count = len(cleaned_text)
                     print(f'爬取成功 字數為{character_count}')
                     print(f'連結 {final_url}')
 
                     currentDateAndTime = datetime.now()
-                    currentTime = currentDateAndTime.strftime("%Y-%m-%d %H:%M:%S")
-                    print(currentTime)
-
-
-                    sql_upsert = """
-                        INSERT INTO book8(book, img, author, chapter_title, character_count, text, book_url, post_date)
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                        ON DUPLICATE KEY UPDATE
-                        book = VALUES(book),
-                        img = VALUES(img),
-                        author = VALUES(author),
-                        chapter_title = VALUES(chapter_title),
-                        character_count = VALUES(character_count),
-                        text = VALUES(text),
-                        book_url = VALUES(book_url),
-                        post_date = VALUES(post_date)
+                    update_date = currentDateAndTime.strftime("%Y-%m-%d %H:%M:%S")
+                    print(update_date)
+                    
+                    #確認該章節是否已在資料庫
+                    sql_check_existing_chapter = """
+                        SELECT COUNT(*) 
+                        FROM chapters 
+                        WHERE book_id = (SELECT book_id FROM books WHERE book = %s) 
+                        AND chapter_title = %s
                     """
+                    
+                    existing_count = db.execute_query(sql_check_existing_chapter, (selected_book, chapter_title))                  
+                    #existing_count若有資料則返回資料，否則0
+                    existing = existing_count[0][0]#取其值確認是否為0
 
-                    db.execute_update(sql_upsert, (selected_book, img_url, author, chapter_title, character_count, cleaned_text, final_url, currentTime))
+                    if existing == 0:
+                        sql_upsert_chapters = """
+                            INSERT INTO chapters(book_id, chapter_title, character_count, text, update_date)
+                            VALUES (
+                                (SELECT book_id FROM books WHERE book = %s),
+                                %s, %s, %s, %s
+                            )
+                        """
+                        
+                        db.execute_update(sql_upsert_chapters, (selected_book, chapter_title, character_count, cleaned_text, update_date))
+                    else:
+                        sql_update_chapter = """
+                            UPDATE chapters
+                            SET character_count = %s, text = %s, update_date = %s
+                            WHERE book_id = (SELECT book_id FROM books WHERE book = %s) 
+                            AND chapter_title = %s
+                        """
+                        db.execute_update(sql_update_chapter, (character_count, cleaned_text, update_date, selected_book, chapter_title))
+                        print("該章節已存在並進行更新。")
+
         db.close()
 
 
-        return selected_book, img_url, author, currentTime
+        return selected_book, images, author, update_date
