@@ -544,7 +544,7 @@ def text():
     #返回目錄url
     back_link = url_for('book', book = book_id)
 
-    return render_template('text.html', result=html_content, chapter_title=f'{chapter_title}', back_link=back_link, next_link=next_link)
+    return render_template('text.html', html_content=html_content, chapter_title=f'{chapter_title}', back_link=back_link, next_link=next_link)
 
 def get_title_list():
     """
