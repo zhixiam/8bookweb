@@ -2,11 +2,19 @@
 
 {% block content %}       
 <div class="container">
+    <nav>
+        <button id="toggleMenuButton">菜單</button>
+        <ul class="menu">
+          <li><button id="increaseFontSizeButton">大字</button></li>
+          <li><button id="decreaseFontSizeButton">小字</button></li>
+          <li><button id="toggleThemeButton" class="switch-button light-mode">關燈</button></li>
+        </ul>
+    </nav>
     <div class="title">
         <h1>{{ chapter_title }}</h1>
     </div>
-    {% if result %}
-        {{ result|safe }}
+    {% if html_content %}
+        <div id="content">{{ html_content|safe }}</div>
     {% else %}
         <p>找不到指定的章節</p>
     {% endif %}
@@ -27,6 +35,65 @@
     function navigateTo(link) {
         if (link) {
             window.location.href = link;
+        }
+    }
+        document.addEventListener('DOMContentLoaded', function () {
+
+    const savedFontSize = localStorage.getItem('fontSize') || '18px';
+    console.log('存储的字体大小:', localStorage.getItem('fontSize'));
+    document.documentElement.style.fontSize = savedFontSize;
+    const savedMode = localStorage.getItem('themeMode');
+    if (savedMode) {
+        document.body.classList.toggle(savedMode);
+        toggleButtonLabel();
+        }
+    });
+
+    const pElement = document.getElementById('content');
+    const initialFontSize = parseFloat(window.getComputedStyle(pElement).fontSize);
+
+    const toggleMenuButton = document.getElementById('toggleMenuButton');
+    const menu = document.querySelector('.menu');
+
+    toggleMenuButton.addEventListener('click', function() {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    });
+
+    const increaseFontSizeButton = document.getElementById('increaseFontSizeButton');
+    const decreaseFontSizeButton = document.getElementById('decreaseFontSizeButton');
+
+    increaseFontSizeButton.addEventListener('click', function() {
+        changeFontSize(1);
+    });
+
+    decreaseFontSizeButton.addEventListener('click', function() {
+        changeFontSize(-1);
+    });
+
+    function changeFontSize(delta) {
+        const currentFontSize = parseFloat(window.getComputedStyle(pElement).fontSize);
+        const newFontSize = currentFontSize + delta;
+
+        pElement.style.fontSize = newFontSize + 'px';
+
+        localStorage.setItem('fontSize', newFontSize + 'px');
+    }
+       
+
+    const switchBtn = document.getElementById('toggleThemeButton');
+    switchBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        const currentMode = document.body.classList.contains('dark-mode') ? 'dark-mode' : 'light-mode';
+        localStorage.setItem('themeMode', currentMode);
+        toggleButtonLabel();
+    });
+
+    function toggleButtonLabel() {
+        const button = document.getElementById('toggleThemeButton');
+        if (document.body.classList.contains('dark-mode')) {
+        button.innerText = '開燈';
+        } else {
+        button.innerText = '關燈';
         }
     }
 </script>
