@@ -40,7 +40,7 @@ pythonanywhere 資料庫匯入方式
 
 1.將檔案上傳到file的資料夾(如:/home/s93114604/mysite)
 
-2.去database建立資料庫名稱(如:輸入bookdb就會出現 使用這名稱$bookdb)
+2.去database建立資料庫名稱(如:輸入bookdb就會出現 使用者名稱$bookdb)
 
 3.use 你的資料庫;
 
