@@ -1,0 +1,95 @@
+{% extends 'admin.html' %}
+
+{% block title %}用戶管理{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('admin_book') }}"><h2 class="logo">小說章節內容管理</h2></a>
+    <table>
+        <thead>
+            <tr>
+                <th>書籍ID</th>
+                <th>書籍名稱</th>
+                <th>作者</th>
+                <th>圖片位置</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book[0] }}</td>  <!-- 書籍ID -->
+                    <td>{{ book[1] }}</td>  <!-- 書籍名稱 -->
+                    <td>{{ book[2] }}</td>  <!-- 作者 -->
+                    <td>{{ book[3] }}</td>  <!-- 圖片位置 -->
+                    <td>
+                        <button type="submit" onclick="listChapters('{{ book[0] }}')">章節內容</button>
+                        <button onclick="openEditForm('{{ book[0] }}', '{{ book[1] }}', '{{ book[2] }}', '{{ book[3] }}')">編輯</button>
+                        <form action="{{ url_for('delete_book', book_id=book[0]) }}" method="post" style="display: inline;">
+                            <button type="submit">刪除</button>
+                        </form>
+
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <label class="message">{{ message }}</label>
+        {% endfor %}
+    {% endwith %}
+
+    <div id="edit" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditForm()">&times;</span>
+            <h3>編輯書籍資訊</h3>
+            <form id="From" action="#" method="post">
+                <input type="hidden" id="bookId" name="bookId">
+                <label for="book">書籍名稱：</label>
+                <input type="text" id="book" name="book" required><br>
+                <label for="author">作者：</label>
+                <input type="text" id="author" name="author" required><br>
+                <label for="image">圖片位置：</label>
+                <input type="text" id="image" name="image" required><br>
+                <input type="submit" value="保存">
+            </form>
+        </div>
+    </div>
+    <div class="pagination">
+        {% if prev_link %}
+            <a href="{{ prev_link }}" class="prev">上一頁</a>
+        {% endif %}
+        
+        {% for num in range(1, total_pages + 1) %}
+            {% if (num >= current_page - 5 and num <= current_page + 5) or num == 1 or num == total_pages %}
+                <a href="{{ url_for('admin_book', page=num) }}" class="{% if num == current_page %}active{% endif %}">{{ num }}</a>
+            {% elif loop.index == 2 %}
+                <span>...</span>
+            {% elif loop.index == total_pages - 1 %}
+                <span>...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if next_link %}
+            <a href="{{ next_link }}" class="next">下一頁</a>
+        {% endif %}
+    </div>
+    <script>
+        function openEditForm(bookId, book, author, image) {
+            document.getElementById("edit").style.display = "block";
+            document.getElementById("bookId").value = bookId;
+            document.getElementById("book").value = book;
+            document.getElementById("author").value = author;
+            document.getElementById("image").value = image;
+            document.getElementById("From").action = "admin/admin_book/edit/" + bookId;
+        }
+    
+        function closeEditForm() {
+            document.getElementById("edit").style.display = "none";
+        }
+        function listChapters(bookId) {
+            var url = '/chapters/' + bookId;
+            window.location.href = url;
+        }
+    </script>
+{% endblock %}

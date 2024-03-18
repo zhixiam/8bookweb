@@ -29,7 +29,7 @@
             {% for list in title_list %}
                 <div class="col">
                     <a class="list-item" href="{{ url_for('reptile', selected_index=loop.index) }}">                    
-                        <p>{{ list[0] }}</p>
+                        <p class="title">{{ list[0] }}</p>
                         <img src="{{ list[2] }}" alt="{{ list[0] }}">
                         <p>作者:{{ list[3] }}</p>
                         <p>章節數:{{ list[4] }}</p>

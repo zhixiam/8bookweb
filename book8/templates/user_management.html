@@ -1,0 +1,87 @@
+{% extends 'admin.html' %}
+
+{% block title %}用戶管理{% endblock %}
+
+{% block content %}
+    <h2>用戶管理</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>用戶ID</th>
+                <th>用户名</th>
+                <th>電子郵件</th>
+                <th>創建日期</th>
+                <th>帳戶狀態</th>
+                <th>權限</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user[0] }}</td>  <!-- 用户ID -->
+                    <td>{{ user[1] }}</td>  <!-- 用户名 -->
+                    <td>{{ user[3] }}</td>  <!-- 電子郵件 -->
+                    <td>{{ user[4] }}</td>  <!-- 創建日期 -->
+                    <td>{{ user[5] }}</td>  <!-- 帳戶狀態 -->
+                    <td>{{ user[6] }}</td>  <!-- 權限階級 -->
+                    <td>
+                        <button onclick="openEditForm('{{ user[0] }}', '{{ user[1] }}', '{{ user[3] }}', '{{ user[5] }}', '{{ user[6] }}')">編輯</button>
+                        {% if user[6] != 'admin' %}
+                            <form action="{{ url_for('delete_user', user_id=user[0]) }}" method="post" style="display: inline;">
+                                <button type="submit">刪除</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <label class="message">{{ message }}</label>
+        {% endfor %}
+    {% endwith %}
+
+    <div id="editModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditForm()">&times;</span>
+            <h3>編輯用戶信息</h3>
+            <form id="editForm" action="#" method="post">
+                <input type="hidden" id="userId" name="userId">
+                <label for="username">用户名：</label>
+                <input type="text" id="username" name="username" required><br>
+                <label for="email">電子郵件：</label>
+                <input type="email" id="email" name="email" required><br>
+                <label for="account_status">帳戶狀態：</label>
+                <select id="account_status" name="account_status">
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select><br>
+                <label for="permission">權限：</label>
+                <select id="permission" name="permission">
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                </select><br>
+                <input type="submit" value="保存">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openEditForm(userId, username, email, accountStatus, permission) {
+            document.getElementById("editModal").style.display = "block";
+            document.getElementById("userId").value = userId;
+            document.getElementById("username").value = username;
+            document.getElementById("email").value = email;
+            document.getElementById("account_status").value = accountStatus;
+            document.getElementById("permission").value = permission;
+            document.getElementById("editForm").action = "/user_management/edit/" + userId;
+        }
+    
+        function closeEditForm() {
+            document.getElementById("editModal").style.display = "none";
+        }
+    
+    </script>
+{% endblock %}

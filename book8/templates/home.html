@@ -37,7 +37,13 @@
     {% endif %}
     
     {% for num in range(1, total_pages + 1) %}
-        <a href="{{ url_for('home', page=num) }}" class="{% if num == current_page %}active{% endif %}">{{ num }}</a>
+        {% if (num >= current_page - 5 and num <= current_page + 5) or num == 1 or num == total_pages %}
+            <a href="{{ url_for('home', page=num) }}" class="{% if num == current_page %}active{% endif %}">{{ num }}</a>
+        {% elif loop.index == 2 %}
+            <span>...</span>
+        {% elif loop.index == total_pages - 1 %}
+            <span>...</span>
+        {% endif %}
     {% endfor %}
     
     {% if next_link %}
@@ -50,11 +56,11 @@
 <footer class="footer">
     <div class="col-md-4">
         <h4>關於我們</h4>
-        <p>此網站一切內容僅學習使用並無營利，若有相關侵權請見諒。</p>
+        <p>此網站一切內容僅學習使用並無營利，若有相關侵權請見諒。<br>若章節內容有甚麼問題也請聯繫我們會馬上改進。</p>
     </div>
     <div class="col-md-4">
         <h4>聯繫我们</h4>
-        <p>信箱:mot666888@gmail.com<br>電話:091-670-9177</p>
+        <p>信箱:mot666888@gmail.com<br>電話:0916-709-177</p>
     </div>
 </footer>
 {% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'admin.html' %}
+
+{% block title %}小說章節內容管理{% endblock %}
+
+{% block content %}
+    <a href="{{ url_for('admin_book') }}"><h2 class="logo">小說章節內容管理</h2></a>
+    <table>
+        <thead>
+            <tr>
+                <th>章節ID</th>
+                <th>書籍ID</th>
+                <th>章節標題</th>
+                <th>字數</th>
+                <th>內文</th>
+                <th>更新時間</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for chapter in chapters %}
+                <tr>
+                    <td>{{ chapter[0] }}</td>  <!-- 章節ID -->  
+                    <td>{{ chapter[1] }}</td>  <!-- 書籍ID -->
+                    <td>{{ chapter[2] }}</td>  <!-- 章節標題 -->
+                    <td>{{ chapter[3] }}</td>  <!-- 字數 -->
+                    <td><textarea id="chapterText_{{ chapter[0] }}" rows="10" cols="50" oninput="updateHiddenField(this, '{{ chapter[0] }}')">{{ chapter[4] }}</textarea></td>  <!-- 內文 -->
+                    <td>{{ chapter[5] }}</td>  <!-- 更新時間 -->
+                    <td>
+                        <form action="{{ url_for('save_chapter', chapter_id=chapter[0]) }}" method="post" style="display: inline;">
+                            <input type="hidden" name="book_id" value="{{ chapter[1] }}">
+                            <input type="hidden" name="chapter_title" value="{{ chapter[2] }}">
+                            <input type="hidden" name="character_count" value="{{ chapter[3] }}">
+                            <input type="hidden" id="hiddenChapterText_{{ chapter[0] }}" name="chapterText" value="{{ chapter[4] }}">
+                            <button type="submit">保存</button>
+                        </form>
+                        <form action="{{ url_for('delete_chapter', chapter_id=chapter[0]) }}" method="post" style="display: inline;">
+                            <button type="submit">刪除</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pagination">
+        {% if prev_link %}
+            <a href="{{ prev_link }}" class="prev">上一頁</a>
+        {% endif %}
+        
+        {% for num in range(1, total_pages + 1) %}
+            {% if (num >= current_page - 5 and num <= current_page + 5) or num == 1 or num == total_pages %}
+                <a href="{{ url_for('chapters',book_id=book_id, page=num) }}" class="{% if num == current_page %}active{% endif %}">{{ num }}</a>
+            {% elif loop.index == 2 %}
+                <span>...</span>
+            {% elif loop.index == total_pages - 1 %}
+                <span>...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if next_link %}
+            <a href="{{ next_link }}" class="next">下一頁</a>
+        {% endif %}
+    </div>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <label class="message">{{ message }}</label>
+        {% endfor %}
+    {% endwith %}
+
+    <script>   
+        // 初始化TinyMCE编辑器
+        document.addEventListener("DOMContentLoaded", function() {
+            tinymce.init({
+                selector: 'textarea',  // 將富文本编辑器附加到所有textarea元素
+                height: 300,  // 编辑器的高度
+                menubar: false,  // 不顯示菜單欄
+                plugins: [
+                    'advlist autolink lists link image charmap print preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste code help wordcount'
+                ],
+                toolbar: 'undo redo | formatselect | ' +
+                    'bold italic backcolor | alignleft aligncenter ' +
+                    'alignright alignjustify | bullist numlist outdent indent | ' +
+                    'removeformat | help',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+            });
+        });
+        function updateHiddenField(textarea, chapterId) {
+            var hiddenField = document.getElementById("hiddenChapterText_" + chapterId);
+            hiddenField.value = textarea.value;
+        }
+    </script>
+{% endblock %}

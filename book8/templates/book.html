@@ -18,9 +18,6 @@
                         加入書籍
                     {% endif %}
                 </button>
-                {% if book_csv %}
-                    <a href="{{ url_for('export_book_csv', book=book_id) }}">Export CSV</a>
-                {% endif %}
             {% endif %}
         </div>
     </div>

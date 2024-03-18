@@ -17,12 +17,20 @@ import datetime
 import jwt
 import secrets
 import string
+import logging
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
 db = Database()
 
+#日誌設定
+current_date = datetime.datetime.now().strftime("%Y-%m-%d")
+log_directory = os.path.join(os.path.dirname(__file__), 'logs')
+if not os.path.exists(log_directory):
+    os.makedirs(log_directory)
+log_filename = os.path.join(log_directory, f'{current_date}.log')
+logging.basicConfig(filename=log_filename, level=logging.INFO)
 
 
 def get_user_info():
@@ -46,12 +54,18 @@ def inject_user_info():
     """  
     return {'user': get_user_info()}
 
-
 @app.route('/')
 def home():
     """
     首頁
     """   
+    db = Database()  # 建立資料庫連線
+    
+    ip_address = request.remote_addr
+    user_agent = request.headers.get('User-Agent')
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # 寫入日誌
+    logging.info(f'{current_time} - P Address: {ip_address}, User-Agent: {user_agent}')
     
     prev_link = None
     next_link = None    
@@ -124,11 +138,10 @@ def home():
 
         except Exception as e:
             print(f"An error occurred: {e}")
-
+        db.close()
         return render_template('home.html', books_info=books_info, total_pages=total_pages, current_page=page, prev_link=prev_link, next_link=next_link, favorite_books=favorite_books)
-    
+    db.close()
     return render_template('home.html', books_info=books_info, total_pages=total_pages, current_page=page, prev_link=prev_link, next_link=next_link)
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -141,27 +154,23 @@ def register():
         confirm_password = request.form['confirm_password']
         email = request.form['email']
         
-        
         if password != confirm_password:
-            error_message = '密碼和確認密碼不一致'
-            return render_template('register.html', error_message=error_message)
+            flash('密碼和確認密碼不一致')
         
         # 檢查用戶名是否已經存在
         existing_user = db.execute_query("SELECT * FROM users WHERE username=%s", (username,))
-        if existing_user:
-            error_message = '已有重複名稱'
-            return render_template('register.html', error_message=error_message)
+        if existing_user:         
+            flash('已有重複名稱')
         
         # 密碼加密
         hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
         # 將用戶的資料存入
-        db.execute_update("INSERT INTO users (username, password_hash, email) VALUES (%s, %s, %s)", (username, hashed_password, email))
+        db.execute_update("INSERT INTO users (username, password_hash, email) VALUES (%s, %s, %s)", (username, hashed_password, email,))
         
         return redirect(url_for('login'))
     else:
         return render_template('register.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -180,7 +189,8 @@ def login():
             user_info = user[0]
             
             stored_password_hash = user_info[2]
-
+            
+            permission_level = user_info[6]
             # 將用戶輸入的密碼做哈希處理
             input_password_hash = hashlib.sha256(password.encode()).hexdigest()
 
@@ -192,23 +202,22 @@ def login():
                     'user_id': user_info[0],
                     'username': user_info[1],
                     'usermail': user_info[3],
+                    'permission_level':user_info[6],
                     'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7)
                 }
 
                 token = jwt.encode(token_payload, app.config['SECRET_KEY'], algorithm='HS256')
                 session['token'] = token
                 
+                if permission_level == 'admin':
+                    return redirect(url_for('admin'))
+                else:
+                    return redirect(url_for('home'))
                 
-                return redirect(url_for('home'))
-
             else:
-                
-                error_message = '用戶名或密碼不對，請重新嘗試。'
-                return render_template('login.html', error_message=error_message)
+                flash('用戶名或密碼不對，請重新嘗試。')
         else:
-
-            error_message = '用戶名不存在，請重新嘗試。'
-            return render_template('login.html', error_message=error_message)
+            flash('用戶名不存在，請重新嘗試。')
 
     return render_template('login.html')
 
@@ -230,6 +239,9 @@ def generate_reset_token():
     return reset_token
 
 def send_reset_password_email(email, reset_token):
+    """
+    用於與gmail串接並發送郵件
+    """
     gmail_user = 'mot666888@gmail.com'  
     gmail_password = 'nyvx dgxx akvp hxjb'#由google生成16位元密碼登入並非本身google密碼  
     
@@ -253,7 +265,6 @@ def send_reset_password_email(email, reset_token):
         print('Email發送失敗')
         print(e)
 
-
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
     """
@@ -270,10 +281,10 @@ def forgot_password():
         users = db.execute_query("SELECT * FROM users WHERE email = %s and reset_token = %s ", (email, reset_token))
         if users:
             send_reset_password_email(email, reset_token)
-            flash("An email with password reset instructions has been sent to your email address.", "success")
+            flash("已發送驗證碼，請到信箱點擊驗證網址。", "success")
             return redirect(url_for('login'))
         else:
-            flash("Invalid email address. Please enter a valid email address.", "error")
+            flash("該信箱並無被註冊，請重新輸入。", "error")
             return redirect(url_for('forgot_password'))
 
     return render_template('forgot_password.html')
@@ -296,15 +307,15 @@ def reset_password(reset_token):
             
                 db.execute_update("UPDATE users SET password_hash=%s WHERE reset_token=%s", (hashed_password, reset_token))
                 
-                flash("Your password has been successfully updated. Please log in with your new password.", "success")
+                flash("你的密碼已被更改請重新登入。", "success")
                 
                 db.execute_update("UPDATE users SET reset_token = NULL WHERE email = %s", (user[0],))
                 return redirect(url_for('login'))
             else:
-                flash("Passwords do not match. Please try again.", "error")
+                flash("密碼與確認密碼不相同，請重新輸入。", "error")
                 return redirect(url_for('reset_password', reset_token = reset_token))
         else:
-            flash("Invalid or expired token. Please try again.", "error")
+            flash("token驗證失敗，請再輸入一次", "error")
             return redirect(url_for('forgot_password'))
 
     return render_template('reset_password.html', reset_token = reset_token)
@@ -363,7 +374,6 @@ def is_book_in_favorites(user_id, book_id):
         print(f"An error occurred while checking if book is in favorites: {e}")
         return False 
   
-
 @app.route('/book')
 def book():
     """   
@@ -437,7 +447,6 @@ def add_to_favorites():
             return jsonify({'success': False, 'message': '添加書籍失敗，請稍後。', 'error': str(e)})
 
 
-
 @app.route('/remove_from_favorites', methods=['POST'])
 def remove_from_favorites():
     if request.method == 'POST':
@@ -460,7 +469,6 @@ def remove_from_favorites():
                 return jsonify({'success': False, 'message': '用戶未登入，請先登入。'})
         except Exception as e:
             return jsonify({'success': False, 'message': '刪除書籍失敗，請稍後。', 'error': str(e)})
-
 
         
 def custom_split(text):
@@ -497,8 +505,6 @@ def custom_split(text):
 
     return paragraphs
 
-
-        
 @app.route('/text')
 def text():    
     """   
@@ -575,11 +581,11 @@ def select_and_scrape_novel_data(novel_scraper, title_list, user_input):
         return None, None, None, None
 
 @app.route('/reptile', methods=['GET', 'POST'])
-def reptile():
+def reptile():  
     """
     爬蟲頁面的路由函數
     """
-    back_link = url_for('home')
+    back_link = url_for('admin')
 
     title_list = get_title_list()
     
@@ -617,6 +623,250 @@ def reptile():
             
     return render_template('reptile.html', back_link=back_link)
 
+@app.route('/admin')
+def admin():
+    if 'token' in session:
+        user_info = get_user_info()
+        if user_info and user_info['permission_level'] == 'admin':
+            # 如果是管理員，則傳遞用戶資訊到模板中
+            return redirect(url_for('user_management'))
+        else:
+            # 如果不是管理員，則重定向到登入頁面
+            flash('您無權訪問此頁面')
+            return redirect(url_for('login'))
+    else:
+       # 如果沒有登入 token，則重定向到登入頁面
+       flash('請先登入')
+       return redirect(url_for('login'))
+   
+
+@app.route('/user_management')
+def user_management():
+    db = Database()
+    if 'token' in session:
+        user_info = get_user_info()
+        if user_info and user_info['permission_level'] == 'admin':          
+            try:
+                users = db.execute_query("SELECT * FROM users")
+            except Exception as e:
+                flash('用戶資訊獲取失敗')
+                print(f"An error occurred: {e}")
+        else:
+            # 如果不是管理員，則重定向到登入頁面
+            flash('您無權訪問此頁面')
+            return redirect(url_for('login'))
+    else:
+       # 如果沒有登入 token，則重定向到登入頁面
+       flash('請先登入')
+       return redirect(url_for('login'))
+   
+    return render_template('user_management.html', users=users)
+
+@app.route('/user_management/edit/<int:user_id>', methods=['POST'])
+def edit_user(user_id):
+    db = Database()
+    try:
+        if request.method == 'POST':
+            username = request.form['username']
+            email = request.form['email']
+            account_status = request.form['account_status']
+            permission = request.form['permission']
+          
+            db.execute_query("UPDATE users SET username = %s, email = %s, account_status = %s, permission_level = %s WHERE user_id = %s", (username, email, account_status, permission, user_id))
+            flash('用戶信息更新成功')
+        else:
+            flash('請使用POST方法提交表單')
+    except Exception as e:
+        flash('用戶信息更新失敗')
+        print(f"An error occurred: {e}")
+    db.close()
+
+    return redirect(url_for('user_management'))
+
+@app.route('/user_management/delete/<int:user_id>', methods=['POST'])
+def delete_user(user_id):
+    
+    db = Database()
+    try:
+        db.execute_query("DELETE FROM users WHERE user_id = %s", (user_id,))
+        flash('用戶刪除成功')
+    except Exception as e:
+        flash('用戶刪除失敗')
+        print(f"An error occurred: {e}")
+    db.close()
+
+    return redirect(url_for('user_management'))    
+    
+@app.route('/admin_book')
+def admin_book():
+    db = Database()
+    if 'token' in session:
+        user_info = get_user_info()
+        if user_info and user_info['permission_level'] == 'admin':
+            prev_link = None
+            next_link = None    
+            page = request.args.get('page', 1, type=int)
+            per_page = 10  # 每頁顯示的書籍數量
+            try:
+                books = db.execute_query("SELECT * FROM books")
+                total_books = len(books)
+                total_pages = (total_books // per_page) + (1 if total_books % per_page > 0 else 0)
+                offset = (page - 1) * per_page
+                books = books[offset : offset + per_page]
+            except Exception as e:
+                flash('書籍資訊獲取失敗')
+                print(f"An error occurred: {e}")
+            if page > 1:    
+                prev_link = url_for('admin_book', page=page - 1) 
+            if page < total_pages:
+                next_link = url_for('admin_book', page=page + 1)
+        else:
+            # 如果不是管理員，則重定向到登入頁面
+            flash('您無權訪問此頁面')
+            return redirect(url_for('login'))
+    else:
+       # 如果沒有登入 token，則重定向到登入頁面
+       flash('請先登入')
+       return redirect(url_for('login'))
+    return render_template('admin_book.html', books=books, total_pages=total_pages, current_page=page, prev_link=prev_link, next_link=next_link)
+
+@app.route('/admin_book/edit/<int:book_id>', methods=['POST'])
+def edit_book(book_id):
+    db = Database()
+
+    try:
+        if request.method == 'POST':
+            book = request.form['book']
+            author = request.form['author']
+            image = request.form['image']
+            
+            db.execute_query("UPDATE books SET book = %s, author = %s, image = %s WHERE book_id = %s", (book, author, image, book_id))
+            flash('書籍信息更新成功')
+        else:
+            flash('請使用POST方法提交表單')
+    except Exception as e:
+        flash('書籍信息更新失敗')
+        print(f"An error occurred: {e}")
+    db.close()
+
+    return redirect(url_for('admin_book'))
+
+@app.route('/admin_book/delete/<int:book_id>', methods=['POST'])
+def delete_book(book_id):
+    
+    db = Database()
+    try:
+        db.execute_query("DELETE FROM books WHERE book_id = %s", (book_id,))
+        db.execute_query("DELETE FROM chapters WHERE book_id = %s", (book_id,))
+        flash('書籍刪除成功')
+    except Exception as e:
+        flash('書籍刪除失敗')
+        print(f"An error occurred: {e}")
+    db.close()
+
+@app.route('/chapters/<int:book_id>', methods=['GET', 'POST'])
+def chapters(book_id):
+    db = Database()
+    prev_link = None
+    next_link = None   
+    if 'token' in session:
+        user_info = get_user_info()
+        if user_info and user_info['permission_level'] == 'admin':
+            page = request.args.get('page', 1, type=int)
+            per_page = 4  # 每頁顯示的書籍數量
+            try:
+                
+                chapters = db.execute_query("SELECT * FROM chapters where book_id = %s", (book_id,))
+                #分頁製作
+                total_chapters = len(chapters)
+                total_pages = (total_chapters // per_page) + (1 if total_chapters % per_page > 0 else 0)
+                offset = (page - 1) * per_page
+                chapters = chapters[offset : offset + per_page]
+            except Exception as e:
+                flash('書籍資訊獲取失敗')
+                print(f"An error occurred: {e}")
+            if page > 1:    
+                prev_link = url_for('chapters', book_id=book_id, page=page - 1) 
+            if page < total_pages:
+                next_link = url_for('chapters', book_id=book_id, page=page + 1)
+        else:
+            # 如果不是管理員，則重定向到登入頁面
+            flash('您無權訪問此頁面')
+            return redirect(url_for('login'))
+    else:
+       # 如果沒有登入 token，則重定向到登入頁面
+       flash('請先登入')
+       return redirect(url_for('login'))
+    return render_template('admin_chapters.html', book_id=book_id, chapters=chapters, total_pages=total_pages, current_page=page, prev_link=prev_link, next_link=next_link )
+
+
+@app.route('/chapters/save_chapter/<int:chapter_id>', methods=['POST'])
+def save_chapter(chapter_id):
+    db = Database()
+    
+    try:
+        if request.method == 'POST':
+            book_id = request.form['book_id']
+            chapter_title = request.form['chapter_title']
+            character_count = request.form['character_count']
+            chapterText = request.form['chapterText']
+            
+            db.execute_query("UPDATE chapters SET book_id = %s, chapter_title = %s, character_count = %s, text = %s WHERE chapter_id = %s", (book_id, chapter_title, character_count, chapterText, chapter_id))
+            flash('書籍信息更新成功')
+        else:
+            flash('請使用POST方法提交表單')
+    except Exception as e:
+        flash('書籍信息更新失敗')
+        print(f"An error occurred: {e}")
+    db.close()
+
+    return redirect(url_for('chapters', book_id=book_id))
+
+@app.route('/chapters/delete/<int:chapter_id>', methods=['POST'])
+def delete_chapter(chapter_id):
+    
+    db = Database()
+    try:
+        db.execute_query("DELETE FROM chapters WHERE chapter_id = %s", (chapter_id,))
+        flash('書籍刪除成功')
+    except Exception as e:
+        flash('書籍刪除失敗')
+        print(f"An error occurred: {e}")
+    db.close()
+
+@app.route('/log')
+def show_logs():
+    if 'token' in session:
+        user_info = get_user_info()
+        if user_info and user_info['permission_level'] == 'admin':
+            log_files = []
+            for filename in os.listdir(log_directory):
+                if filename.endswith('.log'):
+                    log_files.append(filename)
+        else:
+            # 如果不是管理員，則重定向到登入頁面
+            flash('您無權訪問此頁面')
+            return redirect(url_for('login'))
+    else:
+       # 如果沒有登入 token，則重定向到登入頁面
+       flash('請先登入')
+       return redirect(url_for('login'))
+    return render_template('log.html', log_files=log_files)
+
+
+@app.route('/log/<filename>')
+def show_log(filename):
+    log_directory = os.path.join(os.path.dirname(__file__), 'logs')
+    log_contents = read_log_file(log_directory, filename)
+    return render_template('log.html', log_contents=log_contents)
+
+def read_log_file(log_directory, filename):
+    log_content = []
+    log_filename = os.path.join(log_directory, filename)
+    if os.path.exists(log_filename):
+        with open(log_filename, 'r') as f:
+            log_content = f.readlines()
+    return log_content
     
 if __name__ == '__main__':
     app.run()

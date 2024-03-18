@@ -158,7 +158,7 @@ class NovelScraper:
                 print("書名已存在，無需插入新書籍")
             
             
-            chapters = soup.find_all('a', class_='col-sm-12 col-md-6 col-lg-4 py-2 episode_li')
+            chapters = soup.find_all('a', class_='episode_li d-block')
             num_chapters = len(chapters)
             print(f'總共有{num_chapters}')
             for chapter in chapters:
@@ -210,7 +210,7 @@ class NovelScraper:
 
                     text_content = soup.get_text()
                     #清除防盜流水
-                    cleaned_text = re.sub(r'[вＯьoσк⑧ｋ．ｃm⑻ＢОК·См8Ь.cΟＫCｂом８kＢｏοOKСｍBсb⒏Ｃm　]', '', text_content)
+                    cleaned_text = re.sub(r'[вＯьoσк⑧ｋ．ｃm⑻ＢОК·См8Ь.cΟＫCｂом８kＢｏοOKСｍBсb⒏ＣmВ　]', '', text_content)
                     character_count = len(cleaned_text)
                     print(f'爬取成功 字數為{character_count}')
                     print(f'連結 {final_url}')

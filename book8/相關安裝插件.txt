@@ -16,11 +16,15 @@ pip freeze > requirements.txt匯出虛擬環境所安裝的套件
 pip install -r (當前所在的路徑)/requirements.txt 安裝清單中的套件
 
 pythonanywhere 資料庫匯入方式
-1.將檔案上傳到file的資料夾(如:/hmoe/s93114604/mysite)
+1.將檔案上傳到file的資料夾(如:/home/s93114604/mysite)
 2.去database建立資料庫名稱(如:輸入bookdb就會出現s93114604$bookdb)
 3.use s93114604$bookdb;
 4.source /home/s93114604/mysite/你匯出的資料庫名稱.sql;
+source /home/s93114604/mysite/bookdb.sql;
 5.若還是抓不到資料庫請去查詢db.py將db.env的資料輸入進去
+
+若資料庫已有資料須先刪除
+drop database s93114604$bookdb;
 
 sql 資料庫格式
 create database bookdb default character set utf8 collate utf8_general_ci;
@@ -54,6 +58,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `creation_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `account_status` enum('Active','Inactive') DEFAULT 'Active',
+  `permission_level` enum('admin','moderator','user') DEFAULT 'user',
   `reset_token` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 );
@@ -65,4 +70,6 @@ CREATE TABLE `user_favorite_books` (
   KEY `book_id` (`book_id`),
   CONSTRAINT `user_favorite_books_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   CONSTRAINT `user_favorite_books_ibfk_2` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`)
-);	
+);
+
+	

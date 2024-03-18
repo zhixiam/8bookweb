@@ -23,7 +23,7 @@ body {
 }
   
 #scrollTopButton:hover {
-background-color: #333;
+    background-color: #333;
 }
 
 header {
@@ -36,7 +36,9 @@ header {
     color: white;
 }
 .user-info {
-    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 .user-info p {
@@ -47,6 +49,7 @@ header {
 .user-info a {
     text-decoration: none;
     color: #007bff; 
+    margin-left: 5px;
     margin-right: 10px;
 }
 
@@ -56,6 +59,7 @@ header {
 
 .search-container {
     margin-top: 20px;
+
 }
 
 input[type=text] {
@@ -174,7 +178,6 @@ body.dark-mode .container {
 
 .col img {
     width: 90%;
-    height: auto;
     display: block;
     margin: 0 auto;
 }

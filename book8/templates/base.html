@@ -15,9 +15,6 @@
 </head>
 <body>
     <header>
-        <a class="logo" href="{{ url_for('home') }}">
-            <h1>Book Library</h1>
-        </a>
         <div class="user-info">
             {% if user %}
                 <p>歡迎回來，{{ user.username }}</p>
@@ -27,7 +24,9 @@
                 <a href="{{ url_for('register') }}">註冊</a>
             {% endif %}
         </div>
-
+        <a class="logo" href="{{ url_for('home') }}">
+            <h1>Book Library</h1>
+        </a>
         <div class="search-container">
             <form action="{{ url_for('search_books') }}" method="GET">
                 <div class="search-wrapper">
@@ -41,11 +40,6 @@
                 </div>
             </form>
         </div>
-        {% if user%}
-            <div class="crawl-button" >
-                <a href="{{ url_for('reptile') }}">爬蟲模式</a>
-            </div>
-        {% endif %}
         <button onclick="scrollToTop()" id="scrollTopButton" title="回到頂部">top</button>
     </header>
     <main>
@@ -58,13 +52,4 @@
 </body>
 </html>
 
-<!-- <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var crawlButton = document.querySelector('.crawl-button a');
-        crawlButton.addEventListener('click', function (event) {
-            event.preventDefault(); 
-            alert('該功能禁用中需等官方白名單通過');
-        });
-    });
-</script> -->
 

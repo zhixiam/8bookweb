@@ -1,0 +1,331 @@
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:04:52] "GET /network HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:04:52] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:04:58] "GET /admin_book HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:04:58] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:04:59] "GET /network HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:04:59] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:28:53] "[33mGET /network HTTP/1.1[0m" 404 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+ERROR:app:Exception on /admin_book [GET]
+Traceback (most recent call last):
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\mot66\desktop\8bookweb\book8\app.py", line 722, in admin_book
+    return render_template('admin_book.html', books=books, total_pages=total_pages, current_page=page, prev_link=prev_link, next_link=next_link)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\templating.py", line 152, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\templating.py", line 133, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "c:\users\mot66\desktop\8bookweb\book8\templates\admin_book.html", line 1, in top-level template code
+    {% extends 'admin.html' %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\mot66\desktop\8bookweb\book8\templates\admin.html", line 22, in top-level template code
+    <a href="{{ url_for('log') }}">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1071, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1060, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\werkzeug\routing\map.py", line 919, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'log'. Did you mean 'login' instead?
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:20] "[35m[1mGET /admin_book HTTP/1.1[0m" 500 -
+INFO:root:2024-03-17 20:29:27 - P Address: 127.0.0.1, User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/css/home.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/css/text.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/css/book.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/css/reptile.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/images/½Ñ¤Ñ°Ó«°¡G±q¤@¤H¤§¤U¶}©l¡I.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/images/Å]ªk¬ì°ª®Õªº¦Hµ¥¥Í.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/images/[ºî]¤k¹²ªº­×¾i.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/js/scrollTop.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/images/¤j©^¥´§ó¤H.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/images/º©«Â¤§¶W¯Å¬r²G.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/images/Ãö¤_§ÚÂà¥ÍÅÜ¦¨¥vµÜ©i³oÀÉ¨Æ.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/images/Âà¥Í¦¨»jµï¤S«ç¼Ë¡I.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:27] "[36mGET /static/images/¥þ²y¯«ªó²²±Ú³£¬O¥vµÜ©i.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:29] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:29] "[36mGET /static/css/home.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:29] "[36mGET /static/css/text.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:29] "[36mGET /static/css/book.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:29] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:29] "[36mGET /static/css/reptile.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:29] "[36mGET /static/js/scrollTop.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:34] "[32mPOST /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:34] "[32mGET /admin HTTP/1.1[0m" 302 -
+ERROR:app:Exception on /user_management [GET]
+Traceback (most recent call last):
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\mot66\desktop\8bookweb\book8\app.py", line 664, in user_management
+    return render_template('user_management.html', users=users)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\templating.py", line 152, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\templating.py", line 133, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "c:\users\mot66\desktop\8bookweb\book8\templates\user_management.html", line 1, in top-level template code
+    {% extends 'admin.html' %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\mot66\desktop\8bookweb\book8\templates\admin.html", line 22, in top-level template code
+    <a href="{{ url_for('log') }}">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1071, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1060, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\werkzeug\routing\map.py", line 919, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'log'. Did you mean 'login' instead?
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:29:34] "[35m[1mGET /user_management HTTP/1.1[0m" 500 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:31:01] "[32mPOST /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:31:01] "[32mGET /admin HTTP/1.1[0m" 302 -
+ERROR:app:Exception on /user_management [GET]
+Traceback (most recent call last):
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\mot66\desktop\8bookweb\book8\app.py", line 663, in user_management
+    return render_template('user_management.html', users=users)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\templating.py", line 152, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\templating.py", line 133, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "c:\users\mot66\desktop\8bookweb\book8\templates\user_management.html", line 1, in top-level template code
+    {% extends 'admin.html' %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\mot66\desktop\8bookweb\book8\templates\admin.html", line 22, in top-level template code
+    <a href="{{ url_for('log') }}">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1071, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1060, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\werkzeug\routing\map.py", line 919, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'log'. Did you mean 'login' instead?
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:31:01] "[35m[1mGET /user_management HTTP/1.1[0m" 500 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+ERROR:app:Exception on /user_management [GET]
+Traceback (most recent call last):
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\mot66\desktop\8bookweb\book8\app.py", line 655, in user_management
+    return render_template('user_management.html', users=users)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\templating.py", line 152, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\templating.py", line 133, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "c:\users\mot66\desktop\8bookweb\book8\templates\user_management.html", line 1, in top-level template code
+    {% extends 'admin.html' %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\mot66\desktop\8bookweb\book8\templates\admin.html", line 22, in top-level template code
+    <a href="{{ url_for('log') }}">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1071, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1060, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\werkzeug\routing\map.py", line 919, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'log'. Did you mean 'login' instead?
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:32:30] "[35m[1mGET /user_management HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:32:32] "[32mPOST /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:32:32] "[32mGET /admin HTTP/1.1[0m" 302 -
+ERROR:app:Exception on /user_management [GET]
+Traceback (most recent call last):
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1455, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 869, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 867, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 852, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\mot66\desktop\8bookweb\book8\app.py", line 655, in user_management
+    return render_template('user_management.html', users=users)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\templating.py", line 152, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\templating.py", line 133, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\jinja2\environment.py", line 1301, in render
+    self.environment.handle_exception()
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "c:\users\mot66\desktop\8bookweb\book8\templates\user_management.html", line 1, in top-level template code
+    {% extends 'admin.html' %}
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\users\mot66\desktop\8bookweb\book8\templates\admin.html", line 22, in top-level template code
+    <a href="{{ url_for('log') }}">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1071, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\flask\app.py", line 1060, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mot66\anaconda3\Lib\site-packages\werkzeug\routing\map.py", line 919, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'log'. Did you mean 'login' instead?
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:32:32] "[35m[1mGET /user_management HTTP/1.1[0m" 500 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:root:2024-03-17 20:34:15 - P Address: 127.0.0.1, User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/css/home.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/css/text.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/css/book.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/css/reptile.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/js/scrollTop.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/images/½Ñ¤Ñ°Ó«°¡G±q¤@¤H¤§¤U¶}©l¡I.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/images/Å]ªk¬ì°ª®Õªº¦Hµ¥¥Í.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/images/[ºî]¤k¹²ªº­×¾i.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/images/¤j©^¥´§ó¤H.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/images/º©«Â¤§¶W¯Å¬r²G.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/images/Ãö¤_§ÚÂà¥ÍÅÜ¦¨¥vµÜ©i³oÀÉ¨Æ.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/images/Âà¥Í¦¨»jµï¤S«ç¼Ë¡I.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:16] "[36mGET /static/images/¥þ²y¯«ªó²²±Ú³£¬O¥vµÜ©i.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:18] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:18] "[36mGET /static/css/home.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:18] "[36mGET /static/css/text.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:18] "[36mGET /static/css/book.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:18] "[36mGET /static/css/reptile.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:18] "[36mGET /static/css/login.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:18] "[36mGET /static/js/scrollTop.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:24] "[32mPOST /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:24] "[32mGET /admin HTTP/1.1[0m" 302 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:24] "GET /user_management HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:24] "GET /static/css/admin.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:26] "GET /log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:26] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:28] "GET /log/2024-03-17.log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:34:28] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:35:21] "GET /log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:35:21] "GET /static/css/admin.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:35:22] "GET /log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:35:22] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:08] "GET /log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:08] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:09] "GET /log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:09] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:11] "GET /log/2024-03-17.log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:11] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:34] "GET /log/2024-03-17.log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:34] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:44] "GET /log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:44] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:45] "GET /log/2024-03-17.log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:45] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:47] "GET /log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:39:47] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:46:22] "GET /log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:46:22] "GET /static/css/admin.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:46:25] "GET /log/2024-03-17.log HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [17/Mar/2024 20:46:25] "[36mGET /static/css/admin.css HTTP/1.1[0m" 304 -

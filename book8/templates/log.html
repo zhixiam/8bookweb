@@ -1,0 +1,31 @@
+{% extends 'admin.html' %}
+
+{% block title %}網站訪問日誌{% endblock %}
+
+{% block content %}
+
+<div class="log-files">
+    <h3>訪問日誌</h3>
+    <ul>
+        {% for log_file in log_files %}
+            <a href="{{ url_for('show_log', filename=log_file) }}"><li>{{ log_file }}</li></a>
+        {% endfor %}
+    </ul>
+</div>
+
+<div class="visit-log">
+    <h3>日誌內容</h3>
+    <div class="log-content">
+        {% if log_contents %}
+        <a href="{{ url_for('show_logs') }}" class="close">關閉日誌</a>
+            {% for log_content in log_contents %}
+                <li>{{ log_content }}</li>
+            {% endfor %}
+        {% else %}
+            <p>請選擇一個日誌文件以查看其內容。</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+

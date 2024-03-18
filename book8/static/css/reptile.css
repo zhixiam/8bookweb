@@ -1,3 +1,6 @@
 ul.no-bullets, ul.no-bullets li {
     list-style: none;
 }
+p.title{
+    height: 60px;
+}

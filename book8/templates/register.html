@@ -16,9 +16,11 @@
         <input type="password" id="confirm_password" name="confirm_password"><br><br>
         <input type="submit" value="註冊">
     </form>
-    {% if error_message %}
-        <label class="message">{{ error_message }}</label>
-    {% endif %}
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+        <label class="message">{{ message }}</label>
+        {% endfor %}
+    {% endwith %} 
     <br>
     <br>
     <br>
