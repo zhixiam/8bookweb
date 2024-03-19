@@ -35,7 +35,7 @@ class Database:
             return self.cursor.fetchall()
         except Exception as e:
             print(f"Error executing query: {e}")
-            return None
+            return []
 
     def execute_update(self, sql, params=None):
         try:

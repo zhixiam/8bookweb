@@ -41,6 +41,11 @@
         {% block content %}{% endblock %}
     </main>
 </div>
+{% with messages = get_flashed_messages() %}
+    {% for message in messages %}
+        <label class="message">{{ message }}</label>
+    {% endfor %}
+{% endwith %}
 <script>
     function toggleSidebar() {
         var content = document.getElementById('content');
