@@ -242,8 +242,8 @@ def send_reset_password_email(email, reset_token):
     """
     用於與gmail串接並發送郵件
     """
-    gmail_user = 'mot666888@gmail.com'  #gmail信箱
-    gmail_password = 'nyvx dgxx akvp hxjb' #由google生成16位元密碼登入並非本身google密碼  
+    gmail_user = ''  #gmail信箱
+    gmail_password = '' #由google生成16位元密碼登入並非本身google密碼  
     
     msg = MIMEMultipart()
     msg['From'] = gmail_user
