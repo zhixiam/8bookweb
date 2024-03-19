@@ -148,6 +148,7 @@ def register():
     """   
     註冊邏輯  
     """
+    db = Database()
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -177,6 +178,7 @@ def login():
     """   
     登入邏輯   
     """
+    db = Database()
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -271,6 +273,7 @@ def forgot_password():
     忘記密碼邏輯
     使用smtplib向google發送簡易信件
     """
+    db = Database()
     if request.method == 'POST':
         email = request.form.get('email')
         
@@ -295,6 +298,7 @@ def reset_password(reset_token):
     忘記密碼邏輯
     驗證是否包含token
     """
+    db = Database()
     if request.method == 'POST':
         new_password = request.form.get('new_password')
         confirm_password = request.form.get('confirm_password')
@@ -325,6 +329,7 @@ def search_books():
     """   
     搜尋頁面   
     """
+    db = Database()
     query = request.args.get('query')
     try:
         sql = """
@@ -379,6 +384,7 @@ def book():
     """   
     書籍目錄  
     """
+    db = Database()
     back_link = url_for('home')
     #章節查詢
     book_id = request.args.get('book', '')
@@ -427,6 +433,7 @@ def add_to_favorites():
     """   
     添加到使用者最愛列表
     """
+    db = Database()
     if request.method == 'POST':
 
         book_id = request.form.get('book_id')
@@ -449,6 +456,7 @@ def add_to_favorites():
 
 @app.route('/remove_from_favorites', methods=['POST'])
 def remove_from_favorites():
+    db = Database()
     if request.method == 'POST':
         
         book_id = request.form.get('book_id')
@@ -510,6 +518,7 @@ def text():
     """   
     內文頁面   
     """
+    db = Database()
     chapter_title = request.args.get('book',)
     chapter_title = chapter_title.replace('+', ' ')#將書名的+替換成空格
     book_id = request.args.get('book_id')
@@ -585,6 +594,7 @@ def reptile():
     """
     爬蟲頁面的路由函數
     """
+    db = Database()
     back_link = url_for('admin')
 
     title_list = get_title_list()
@@ -626,6 +636,7 @@ def admin():
     """   
     後台模板與登入驗證 
     """
+    db = Database()
     if 'token' in session:
         user_info = get_user_info()
         if user_info and user_info['permission_level'] == 'admin':
