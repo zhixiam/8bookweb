@@ -18,7 +18,7 @@ import jwt
 import secrets
 import string
 import logging
-
+import re
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -900,7 +900,15 @@ def show_logs():
             log_files = []
             for filename in os.listdir(log_directory):
                 if filename.endswith('.log'):
-                    log_files.append(filename)
+                    # 使用正則表達式提取日期
+                    match = re.search(r'(\d{4})-(\d{2})-(\d{2}).log', filename)
+                    if match:
+                        year, month, day = match.groups()
+                        date_str = f"{year}-{month}-{day}"
+                        log_files.append((filename, date_str))
+            # 按照日期進行排序，從最近到最遠
+            log_files.sort(key=lambda x: x[1], reverse=True)
+            log_files = [filename for filename, _ in log_files]
         else:
             # 如果不是管理員，則重定向到登入頁面
             flash('您無權訪問此頁面')
