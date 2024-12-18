@@ -1,0 +1,66 @@
+name: Deploy to PythonAnywhere
+
+on:
+  push:
+    branches:
+      - main  # 當推送到 main 分支時觸發部署
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10  # PythonAnywhere 支援的版本
+
+      - name: Install dependencies locally
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install -r requirements.txt
+
+      - name: Package project
+        run: |
+          tar -czf project.tar.gz ./
+
+      - name: Upload project to PythonAnywhere
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          TOKEN: ${{ secrets.TOKEN }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          curl -X POST -H "Authorization: Token $TOKEN" \
+          -F "file=@project.tar.gz" \
+          "https://www.pythonanywhere.com/api/v0/user/$USERNAME/files/path$DEPLOY_PATH/project.tar.gz"
+
+      - name: Extract project and install dependencies using pip3 on PythonAnywhere
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          TOKEN: ${{ secrets.TOKEN }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          curl -X POST -H "Authorization: Token $TOKEN" \
+          -d "command=cd $DEPLOY_PATH && tar -xzf project.tar.gz && rm project.tar.gz && pip3 install --upgrade pip && pip3 install -r requirements.txt" \
+          "https://www.pythonanywhere.com/api/v0/user/$USERNAME/consoles/"
+
+      - name: Reload PythonAnywhere Web App
+        env:
+          USERNAME: ${{ secrets.USERNAME }}
+          TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          curl -X POST -H "Authorization: Token $TOKEN" \
+          "https://www.pythonanywhere.com/api/v0/user/$USERNAME/webapps/mysite/reload/"
+
+
+      - name: Reload PythonAnywhere Web App
+        env:
+          USERNAME: ${{ secrets.PYTHONANYWHERE_USERNAME }}
+          API_TOKEN: ${{ secrets.PYTHONANYWHERE_API_TOKEN }}
+        run: |
+          # 重新加載 Web 應用
+          curl -X POST -H "Authorization: Token $API_TOKEN" \
+          "https://www.pythonanywhere.com/api/v0/user/$USERNAME/webapps/mysite/reload/"
