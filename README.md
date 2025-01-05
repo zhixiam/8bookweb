@@ -45,6 +45,37 @@
    
 ## 資料庫設置與初始化  
 
+1. **建立資料庫**
+
    在 MySQL 中執行以下指令，建立資料庫 `bookdb` 並設定字符集：  
    ```sql
    CREATE DATABASE bookdb DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+2. **匯入資料庫結構和初始資料**
+
+   將現有的資料庫結構及初始資料匯入到新建的資料庫中，執行以下指令：
+   ```sql
+   USE bookdb;
+   SOURCE /path/to/your/database_dump.sql;
+
+   請將 /path/to/your/database_dump.sql 替換為實際檔案存放路徑。
+
+3. **驗證資料庫設置**
+
+   執行以下指令，確認資料庫結構和內容已正確匯入：
+   ```sql
+   USE bookdb;
+   SOURCE /path/to/your/database_dump.sql;
+
+   請將 your_table_name 替換為您的資料表名稱。
+
+## 環境變數設置
+
+   在專案根目錄中建立 .env 檔案，並填入以下內容：
+   ```env
+   DATABASE_URI=mysql://username:password@localhost/bookdb
+   SECRET_KEY=your_secret_key
+  
+   username：MySQL 用戶名
+   password：MySQL 密碼
+   your_secret_key：應用程式的隨機密鑰，用於加密和驗證功能
