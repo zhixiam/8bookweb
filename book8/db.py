@@ -12,11 +12,11 @@ load_dotenv(dotenv_path='db.env')
 
 class Database:
     def __init__(self):
-        host = os.getenv('DB_HOST', 'localhost')
-        user = os.getenv('DB_USER', 'root')
-        password = os.getenv('DB_PASSWORD', '')
-        dbname = os.getenv('DB_NAME', 'your_database_name')
-        port = int(os.getenv('DB_PORT', 3306))  
+        host = os.getenv('DB_HOST')
+        user = os.getenv('DB_USER')
+        password = os.getenv('DB_PASSWORD')
+        dbname = os.getenv('DB_NAME')
+        port = int(os.getenv('DB_PORT'))  #需要整數
 
         self.conn = MySQLdb.connect(
             host=host,
